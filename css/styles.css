@@ -76,6 +76,9 @@
 .text-yellow {
   color: #ffc107;
 }
+.border-img {
+  border: 8px solid #fff;
+}
 .col-overlap {
   margin-left: -100%;
 }
