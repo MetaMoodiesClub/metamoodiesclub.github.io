@@ -4801,6 +4801,7 @@ textarea.form-control-lg {
   padding: 1rem 1.25rem;
   color: var(--bs-gray);
   font-size: 1rem;
+  text-align: start;
 }
 
 .accordion-flush .accordion-collapse {
