@@ -78,6 +78,7 @@
 }
 .border-img {
   border: 8px solid #fff;
+  border-radius: 25px;
 }
 .col-overlap {
   margin-left: -100%;
@@ -262,7 +263,7 @@ blockquote {
 b,
 strong {
   font-weight: bold;
-  color: #C258E7;
+  color: #9681d8;
 }
 
 small, .small {
