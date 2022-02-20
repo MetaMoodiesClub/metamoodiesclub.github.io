@@ -28,3 +28,15 @@ function backToTop() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
 }
+
+// Animation playback controls
+document.getElementById("video-globe").playbackRate = 2.0;
+document.getElementById("video-originals").playbackRate = 1.0;
+document.getElementById("video-wildlings").playbackRate = 1.0;
+document.getElementById("video-arrivals").playbackRate = 1.0;
+document.getElementById("video-universals").playbackRate = 1.0;
+document.getElementById("video-super-cool").playbackRate = 3.0;
+document.getElementById("video-meta-moodon").playbackRate = 3.0;
+document.getElementById("video-donation-card").playbackRate = 3.0;
+document.getElementById("video-merch").playbackRate = 3.0;
+document.getElementById("video-rocket").playbackRate = 5.0;

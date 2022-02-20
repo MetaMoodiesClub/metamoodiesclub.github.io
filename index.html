@@ -38,7 +38,7 @@
                             <li class="nav-item px-3"><a class="nav-link" href="#team">Team</a></li>
                             <li class="nav-item px-3"><a class="nav-link" href="#roadmap">Roadmap</a></li>
                             <li class="nav-item px-3"><a class="nav-link" href="#faq">FAQs</a></li>
-                            <li><a class="ms-0 ms-lg-5 btn btn-secondary btn-lg rounded-pill" href="https://discord.gg/Z42pCnhV7j" target="blank"><i class="fab fa-discord"></i> Join on Discord</a></li>
+                            <li><a class="ms-0 ms-lg-5 btn btn-secondary btn-lg rounded-pill" href="https://discord.gg/Z42pCnhV7j" target="blank"><i class="fab fa-discord"></i> Discord</a></li>
                         </ul>
                     </div>
                 </div>
@@ -57,11 +57,9 @@
                 <div class="container px-5 mt-0 mt-4-md">
                     <div class="row gx-5 align-items-center">
                         <div class="col-lg-6 order-lg-2">
-                            <div class="px-5">
-                                <video class="img-fluid" autoplay loop muted playsinline>
-                                    <source src="assets/img/globe.webm" type="video/webm">
-                                </video>
-                            </div>
+                            <video class="img-fluid" id="video-globe" autoplay loop muted playsinline>
+                                <source src="assets/img/globe.webm" type="video/webm">
+                            </video>
                         </div>
                         <div class="col-lg-6 order-lg-1">
                             <div class="p-2">
@@ -84,28 +82,28 @@
                     <div class="container">
                         <div class="row gx-5 px-5 justify-content-center">
                             <div class="col-lg-3 col-md-4 col-6 px-3 text-center text-body">
-                                <video class="img-fluid border-img" autoplay loop muted playsinline>
+                                <video class="img-fluid border-img" id="video-originals" autoplay loop muted playsinline>
                                     <source src="assets/img/originals.webm" type="video/webm">
                                 </video>
                                 <!-- <img class="img-fluid border-img" src="assets/img/originals.gif" alt="Meta moodies club cover"/> -->
                                 <h3 class="p-2">Originals</h3>
                             </div>
                             <div class="col-lg-3 col-md-4 col-6 px-3 text-center text-body">
-                                <video class="img-fluid border-img" autoplay loop muted playsinline>
+                                <video class="img-fluid border-img" id="video-wildlings" autoplay loop muted playsinline>
                                     <source src="assets/img/wildlings.webm" type="video/webm">
                                 </video>
                                 <!-- <img class="img-fluid border-img" src="assets/img/wildlings.gif" alt="Meta moodies club cover"/> -->
                                 <h3 class="p-2">Wildlings</h3>
                             </div>
                             <div class="col-lg-3 col-md-4 col-6 px-3 text-center text-body">
-                                <video class="img-fluid border-img" autoplay loop muted playsinline>
+                                <video class="img-fluid border-img" id="video-arrivals" autoplay loop muted playsinline>
                                     <source src="assets/img/arrivals.webm" type="video/webm">
                                 </video>
                                 <!-- <img class="img-fluid border-img" src="assets/img/arrivals.gif" alt="Meta moodies club cover"/> -->
                                 <h3 class="p-2">Arrivals</h3>
                             </div>
                             <div class="col-lg-3 col-md-4 col-6 px-3 text-center text-body">
-                                <video class="img-fluid border-img" autoplay loop muted playsinline>
+                                <video class="img-fluid border-img" id="video-universals" autoplay loop muted playsinline>
                                     <source src="assets/img/universals.webm" type="video/webm">
                                 </video>
                                 <!-- <img class="img-fluid border-img" src="assets/img/universals.gif" alt="Meta moodies club cover"/> -->
@@ -211,7 +209,7 @@
                                 We have milestone along the way that unlock funds for the team to expand the MetaMoodie Universe.</h4>
                             <div class="row gx-5 px-5 mb-5 justify-content-around">
                                 <div class="col-md-6 col-12 px-3">
-                                    <video class="img-fluid" autoplay loop muted playsinline>
+                                    <video class="img-fluid" id="video-super-cool" style="height: 100%;" autoplay loop muted playsinline>
                                         <source src="assets/img/super-cool.webm" type="video/webm">
                                     </video>
                                 </div>
@@ -229,7 +227,9 @@
                             </div>
                             <div class="row gx-5 px-5 mb-5 justify-content-around">
                                 <div class="col-md-6 col-12 order-0 order-md-1 px-3">
-                                    <img class="img-fluid" src="assets/img/lol.webp" alt="Meta moodies club cover"/>
+                                    <video class="img-fluid" id="video-meta-moodon" style="height: 100%;" autoplay loop muted playsinline>
+                                        <source src="assets/img/metamoodon-construction.webm" type="video/webm">
+                                    </video>
                                 </div>
                                 <div class="col-md-6 col-12 order-1 order-md-0 px-5 text-center text-body">
                                     <h2 class="p-2"><strong>Meta Moodie Club Designs</strong></h2>
@@ -245,7 +245,7 @@
                             </div>
                             <div class="row gx-5 px-5 mb-5 justify-content-around">
                                 <div class="col-md-6 col-12 px-3">
-                                    <video class="img-fluid" autoplay loop muted playsinline>
+                                    <video class="img-fluid" id="video-donation-card" style="height: 100%;" autoplay loop muted playsinline>
                                         <source src="assets/img/donation-card.webm" type="video/webm">
                                     </video>
                                 </div>
@@ -263,8 +263,8 @@
                             </div>
                             <div class="row gx-5 px-5 mb-5 justify-content-around">
                                 <div class="col-md-6 col-12 order-0 order-md-1 px-3">
-                                    <video class="img-fluid" autoplay loop muted playsinline>
-                                        <source src="assets/img/rocket.webm" type="video/webm">
+                                    <video class="img-fluid"  id="video-merch" style="height: 100%;" autoplay loop muted playsinline>
+                                        <source src="assets/img/merch.webm" type="video/webm">
                                     </video>
                                 </div>
                                 <div class="col-md-6 col-12 order-1 order-md-0 px-5 text-center text-body">
@@ -281,7 +281,9 @@
                             </div>
                             <div class="row gx-5 px-5 justify-content-around">
                                 <div class="col-md-6 col-12 px-3">
-                                    <img class="img-fluid" src="assets/img/lol.webp" alt="Meta moodies club cover"/>
+                                    <video class="img-fluid"  id="video-rocket" style="height: 100%;" autoplay loop muted playsinline>
+                                        <source src="assets/img/rocket.webm" type="video/webm">
+                                    </video>
                                 </div>
                                 <div class="col-md-6 col-12 px-5 text-center text-body">
                                     <h2 class="p-2"><strong>To infinity and Beyond</strong></h2>
