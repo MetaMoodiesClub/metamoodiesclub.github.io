@@ -30,13 +30,13 @@ function backToTop() {
 }
 
 // Animation playback controls
-document.getElementById("video-globe").playbackRate = 1.0;
+document.getElementById("video-globe").playbackRate = 2.0;
 document.getElementById("video-originals").playbackRate = 1.0;
 document.getElementById("video-wildlings").playbackRate = 1.0;
 document.getElementById("video-arrivals").playbackRate = 1.0;
 document.getElementById("video-universals").playbackRate = 1.0;
-document.getElementById("video-super-cool").playbackRate = 1.0;
-document.getElementById("video-meta-moodon").playbackRate = 1.0;
-document.getElementById("video-donation-card").playbackRate = 1.0;
-document.getElementById("video-merch").playbackRate = 1.0;
-document.getElementById("video-rocket").playbackRate = 1.0;
+document.getElementById("video-super-cool").playbackRate = 2.0;
+document.getElementById("video-meta-moodon").playbackRate = 2.0;
+document.getElementById("video-donation-card").playbackRate = 2.0;
+document.getElementById("video-merch").playbackRate = 2.0;
+document.getElementById("video-rocket").playbackRate = 1.2;

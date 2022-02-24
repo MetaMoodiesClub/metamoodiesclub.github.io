@@ -83,6 +83,9 @@
 .col-overlap {
   margin-left: -100%;
 }
+.no-margins {
+  margin: 0px !important;
+}
 .roadmap-container-bg {
   background-color: #FFFEF2;
 }
@@ -97,8 +100,8 @@
 }
 .curved-image {
   max-width: 2000px; 
-  width: 100%; 
-  max-height: 300px;
+  width: 100%;
+  max-height: 280px;
 }
 #mint-message {
   color: #B956CB;
