@@ -23,7 +23,6 @@ const getWeb3 = () => {
                 }
             } else {
                 reject("Must install MetaMask");
-                setError("Please install Metamask!");
             }
         });
     });
