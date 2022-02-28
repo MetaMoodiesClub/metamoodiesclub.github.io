@@ -7,7 +7,9 @@ let whitelist;
 
 let preSaleLive = false;
 let publicSaleLive = false;
+let costPerNFT = 2000000;
 let maxMintCount = 3;
+let remainingSupply = 1010;
 
 const getWeb3 = () => {
     return new Promise((resolve, reject) => {
@@ -109,14 +111,19 @@ const addListeners = async () => {
 const fetchSaleDetails = async () => {
     preSaleLive = await contract.methods.preSaleLive().call();
     publicSaleLive = await contract.methods.publicSaleLive().call();
+    remainingSupply = await contract.methods.remainingSupply().call();
 
     if (preSaleLive) {
         maxMintCount = await contract.methods.preSaleLimitPerAddress().call();
+        costPerNFT = await contract.methods.preSaleCost().call();
     } else if (publicSaleLive) {
         maxMintCount = await contract.methods.publicSaleLimitPerAddress().call();
+        costPerNFT = await contract.methods.publicSaleCost().call();
     } else {
         setError("Sale is not live. Checkout Discord for details!");
     }
+    $("#moodie-cost").text(costPerNFT / 1000000000000000000);
+    $("#moodies-left").text(remainingSupply);
 };
 
 const mintMoodies = async () => {
@@ -126,22 +133,19 @@ const mintMoodies = async () => {
         .then(() => getAccounts())
         .then(async (accounts) => {
             let mintStatus;
+            const totalCost = costPerNFT * mintCount;
             
             if (preSaleLive) {
                 if (whitelist[accounts[0]] === undefined) {
                     setError("This is a pre-sale! Looks like you are not on the whitelist. Please wait for the public sale!");
                     return;
                 }
-                const costPerNFT = await contract.methods.preSaleCost().call();
-                const totalCost = costPerNFT * mintCount;
                 mintStatus = contract.methods.mintPreSale(mintCount, whitelist[accounts[0]]).send({ 
                     from: accounts[0], 
                     gas: 200000,
                     value: totalCost
                 });
             } else if (publicSaleLive) {
-                const costPerNFT = await contract.methods.publicSaleCost().call();
-                const totalCost = costPerNFT * mintCount;
                 mintStatus = contract.methods.mintPublicSale(mintCount).send({ 
                     from: accounts[0], 
                     gas: 200000,
@@ -160,7 +164,7 @@ const mintMoodies = async () => {
                 $("#mint-success").hide();
             }).finally(() => {
                 enableState();
-            });
+            }).then(() => fetchSaleDetails());
     }).catch(() => {
         setError("Please select the correct network in the Wallet!");
         enableState();
