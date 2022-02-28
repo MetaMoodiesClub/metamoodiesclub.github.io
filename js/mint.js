@@ -7,7 +7,7 @@ let whitelist;
 
 let preSaleLive = false;
 let publicSaleLive = false;
-let costPerNFT = 2000000;
+let costPerNFT = 20000000000000000;
 let maxMintCount = 3;
 let remainingSupply = 1010;
 
