@@ -13,7 +13,7 @@ const getWeb3 = () => {
     return new Promise((resolve, reject) => {
         window.addEventListener("load", async () => {
             if (window.ethereum) {
-                const web3 = new Web3(window.ethereum);
+                web3 = new Web3(window.ethereum);
                 try {
                     resolve(web3);
                 } catch (error) {
@@ -28,13 +28,19 @@ const getWeb3 = () => {
 };
 
 const getContract = async () => {
-    const data = await $.getJSON("./contract/MetaMoodiesClub.json");
-    whitelist = await $.getJSON("./contract/whitelist.json");
-    const moodiesContract = new web3.eth.Contract(
-        data.abi,
-        contractAddress
-    );
-    return moodiesContract;
+    return new Promise(async (resolve, reject) => {
+        try {
+            const data = await $.getJSON("./contract/MetaMoodiesClub.json");
+            whitelist = await $.getJSON("./contract/whitelist.json");
+            contract = new web3.eth.Contract(
+                data.abi,
+                contractAddress
+            );
+            resolve(contract);
+        } catch (error) {
+            reject(error);
+        }
+    });
 };
 
 const getAccounts = async () => {
@@ -50,11 +56,26 @@ const setError = async (message) => {
     $("#mint-error").text(message).show();
 }
 
+const disableState = async () => {
+    $("#mint-count-minus").prop( "disabled", true );
+    $("#mint-count-plus").prop( "disabled", true );
+    $("#mint-button").text("Minting...").prop( "disabled", true );
+    $("#mint-error").hide();
+    $("#mint-success").hide();
+}
+
+const enableState = async () => {
+    $("#mint-count-minus").prop( "disabled", false );
+    $("#mint-count-plus").prop( "disabled", false );
+    $("#mint-button").text("Mint Moodies").prop( "disabled", false );   
+}
+
 // Add listeners for button
 const addListeners = async () => {
     mintCount = 1;
     $("#connect-metamask-button").on("click", async (e) => {
         e.preventDefault();
+        $("#connect-metamask-button").text("Connecting...");
         getAccounts().then(() => {
             $("#mint-counters").show();
             $("#mint-button").show();
@@ -65,6 +86,8 @@ const addListeners = async () => {
             $("#mint-button").hide();
             $("#connect-metamask-button").show();
             setError("Error connecting to Metamask. Please try again!");
+        }).finally(() => {
+            $("#connect-metamask-button").text("Connect Wallet");
         });
     });
     $("#mint-count-minus").on("click", async (e) => {
@@ -97,49 +120,61 @@ const fetchSaleDetails = async () => {
 };
 
 const mintMoodies = async () => {
-    await fetchSaleDetails();
-    const fromAddr = (await getAccounts())[0];
-    let mintStatus;
-    
-    if (preSaleLive) {
-        if (whitelist[fromAddr] === undefined) {
-            setError("This is a pre-sale! Looks like you are not on the whitelist. Please wait for the public sale!");
-            return;
-        }
-        const costPerNFT = await contract.methods.preSaleCost().call();
-        const totalCost = costPerNFT * mintCount;
-        mintStatus = contract.methods.mintPreSale(mintCount, whitelist[fromAddr]).send({ 
-            from: fromAddr, 
-            gas: 200000,
-            value: totalCost
-        });
-    } else if (publicSaleLive) {
-        const costPerNFT = await contract.methods.publicSaleCost().call();
-        const totalCost = costPerNFT * mintCount;
-        mintStatus = contract.methods.mintPublicSale(mintCount).send({ 
-            from: fromAddr, 
-            gas: 200000,
-            value: totalCost
-        });
-    } else {
-        return;
-    }
+    disableState();
+    await getContract()
+        .then(() => fetchSaleDetails())
+        .then(() => getAccounts())
+        .then(async (accounts) => {
+            let mintStatus;
+            
+            if (preSaleLive) {
+                if (whitelist[accounts[0]] === undefined) {
+                    setError("This is a pre-sale! Looks like you are not on the whitelist. Please wait for the public sale!");
+                    return;
+                }
+                const costPerNFT = await contract.methods.preSaleCost().call();
+                const totalCost = costPerNFT * mintCount;
+                mintStatus = contract.methods.mintPreSale(mintCount, whitelist[accounts[0]]).send({ 
+                    from: accounts[0], 
+                    gas: 200000,
+                    value: totalCost
+                });
+            } else if (publicSaleLive) {
+                const costPerNFT = await contract.methods.publicSaleCost().call();
+                const totalCost = costPerNFT * mintCount;
+                mintStatus = contract.methods.mintPublicSale(mintCount).send({ 
+                    from: accounts[0], 
+                    gas: 200000,
+                    value: totalCost
+                });
+            } else {
+                return;
+            }
 
-    await mintStatus.then((success) => {
-        $("#mint-error").hide();
-        $("#mint-success").show();
-        console.log(success);
-    }).catch((error) => {
-        setError(`Mint failed! ${error.message} Please retry!`);
+            await mintStatus.then((success) => {
+                $("#mint-error").hide();
+                $("#mint-success").show();
+                console.log(success);
+            }).catch((error) => {
+                setError(`Mint failed! ${error.message} Please retry!`);
+                $("#mint-success").hide();
+            }).finally(() => {
+                enableState();
+            });
+    }).catch(() => {
+        setError("Please select the correct network in the Wallet!");
+        enableState();
     });
 }
 
 async function moodiesMinter() {
-    web3 = await getWeb3();
-    contract = await getContract(web3);
-
-    await fetchSaleDetails(contract);
-    await addListeners();
+    await addListeners()
+        .then(() => getWeb3())
+        .then(() => getContract())
+        .then(() => fetchSaleDetails())
+        .catch((error) => {
+            console.log(`Error fetching initial details. ${error}`);
+        })
 }
 
 moodiesMinter();

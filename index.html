@@ -57,7 +57,7 @@
                 <div class="container px-5 mt-0 mt-4-md">
                     <div class="row gx-5 align-items-center">
                         <div class="col-lg-6 order-lg-2">
-                            <video class="img-fluid" id="video-globe" autoplay loop muted playsinline>
+                            <video class="img-fluid" id="video-globe" autoplay loop muted playsinline disableRemotePlayback>
                                 <source src="assets/img/globe.webm" type="video/webm">
                             </video>
                         </div>
@@ -82,28 +82,28 @@
                     <div class="container">
                         <div class="row gx-5 px-5 justify-content-center">
                             <div class="col-lg-3 col-md-4 col-6 px-3 text-center text-body">
-                                <video class="img-fluid border-img" id="video-originals" autoplay loop muted playsinline>
+                                <video class="img-fluid border-img" id="video-originals" autoplay loop muted playsinline disableRemotePlayback>
                                     <source src="assets/img/originals.webm" type="video/webm">
                                 </video>
                                 <!-- <img class="img-fluid border-img" src="assets/img/originals.gif" alt="Meta moodies club cover"/> -->
                                 <h3 class="p-2">Originals</h3>
                             </div>
                             <div class="col-lg-3 col-md-4 col-6 px-3 text-center text-body">
-                                <video class="img-fluid border-img" id="video-wildlings" autoplay loop muted playsinline>
+                                <video class="img-fluid border-img" id="video-wildlings" autoplay loop muted playsinline disableRemotePlayback>
                                     <source src="assets/img/wildlings.webm" type="video/webm">
                                 </video>
                                 <!-- <img class="img-fluid border-img" src="assets/img/wildlings.gif" alt="Meta moodies club cover"/> -->
                                 <h3 class="p-2">Wildlings</h3>
                             </div>
                             <div class="col-lg-3 col-md-4 col-6 px-3 text-center text-body">
-                                <video class="img-fluid border-img" id="video-arrivals" autoplay loop muted playsinline>
+                                <video class="img-fluid border-img" id="video-arrivals" autoplay loop muted playsinline disableRemotePlayback>
                                     <source src="assets/img/arrivals.webm" type="video/webm">
                                 </video>
                                 <!-- <img class="img-fluid border-img" src="assets/img/arrivals.gif" alt="Meta moodies club cover"/> -->
                                 <h3 class="p-2">Arrivals</h3>
                             </div>
                             <div class="col-lg-3 col-md-4 col-6 px-3 text-center text-body">
-                                <video class="img-fluid border-img" id="video-universals" autoplay loop muted playsinline>
+                                <video class="img-fluid border-img" id="video-universals" autoplay loop muted playsinline disableRemotePlayback>
                                     <source src="assets/img/universals.webm" type="video/webm">
                                 </video>
                                 <!-- <img class="img-fluid border-img" src="assets/img/universals.gif" alt="Meta moodies club cover"/> -->
@@ -127,8 +127,8 @@
                                 <span id="mint-count" class="mx-3">1</span>
                                 <button type="button" class="btn btn-secondary mint-count-button" id="mint-count-plus">+</button>
                             </div>
-                            <a class="btn btn-secondary btn-lg rounded-pill" href="javascript:void(0);" id="mint-button" style="display: none;">Mint Moodies</a>
-                            <a class="btn btn-primary btn-lg rounded-pill" href="javascript:void(0);" id="connect-metamask-button">Connect Wallet</a>
+                            <button type="button" class="btn btn-secondary btn-lg rounded-pill" id="mint-button" style="display: none;">Mint Moodies</button>
+                            <button type="button" class="btn btn-primary btn-lg rounded-pill" id="connect-metamask-button">Connect Wallet</button>
                             <p id="mint-error" class="mt-4 mx-5 mx-sm-0" style="display: none;">Connect to Metamask</p>
                             <div id="mint-success" class="mt-5 mx-5 mx-sm-0" style="display: none;">
                                 <p>Mint successful!</p>
@@ -217,7 +217,7 @@
                         <div class="container">
                             <div class="row gx-5 px-5 mb-5 justify-content-around">
                                 <div class="col-md-6 col-12 px-3">
-                                    <video class="img-fluid" id="video-super-cool" style="height: 100%;" autoplay loop muted playsinline>
+                                    <video class="img-fluid" id="video-super-cool" style="height: 100%;" autoplay loop muted playsinline disableRemotePlayback>
                                         <source src="assets/img/super-cool.webm" type="video/webm">
                                     </video>
                                 </div>
@@ -235,7 +235,7 @@
                             </div>
                             <div class="row gx-5 px-5 mb-5 justify-content-around">
                                 <div class="col-md-6 col-12 order-0 order-md-1 px-3">
-                                    <video class="img-fluid" id="video-meta-moodon" style="height: 100%;" autoplay loop muted playsinline>
+                                    <video class="img-fluid" id="video-meta-moodon" style="height: 100%;" autoplay loop muted playsinline disableRemotePlayback>
                                         <source src="assets/img/metamoodon-construction.webm" type="video/webm">
                                     </video>
                                 </div>
@@ -253,7 +253,7 @@
                             </div>
                             <div class="row gx-5 px-5 mb-5 justify-content-around">
                                 <div class="col-md-6 col-12 px-3">
-                                    <video class="img-fluid" id="video-donation-card" style="height: 100%;" autoplay loop muted playsinline>
+                                    <video class="img-fluid" id="video-donation-card" style="height: 100%;" autoplay loop muted playsinline disableRemotePlayback>
                                         <source src="assets/img/donation-card.webm" type="video/webm">
                                     </video>
                                 </div>
@@ -271,7 +271,7 @@
                             </div>
                             <div class="row gx-5 px-5 mb-5 justify-content-around">
                                 <div class="col-md-6 col-12 order-0 order-md-1 px-3">
-                                    <video class="img-fluid"  id="video-merch" style="height: 100%;" autoplay loop muted playsinline>
+                                    <video class="img-fluid"  id="video-merch" style="height: 100%;" autoplay loop muted playsinline disableRemotePlayback>
                                         <source src="assets/img/merch.webm" type="video/webm">
                                     </video>
                                 </div>
@@ -289,7 +289,7 @@
                             </div>
                             <div class="row gx-5 px-5 justify-content-around">
                                 <div class="col-md-6 col-12 px-3">
-                                    <video class="img-fluid"  id="video-rocket" style="height: 100%;" autoplay loop muted playsinline>
+                                    <video class="img-fluid"  id="video-rocket" style="height: 100%;" autoplay loop muted playsinline disableRemotePlayback>
                                         <source src="assets/img/rocket.webm" type="video/webm">
                                     </video>
                                 </div>
