@@ -137,6 +137,7 @@ const mintMoodies = async () => {
             if (preSaleLive) {
                 if (whitelist[accounts[0]] === undefined) {
                     setError("This is a pre-sale! Looks like you are not on the whitelist. Please wait for the public sale!");
+                    enableState();
                     return;
                 }
                 mintStatus = contract.methods.mintPreSale(mintCount, whitelist[accounts[0]]).send({ 
@@ -151,6 +152,7 @@ const mintMoodies = async () => {
                     value: totalCost
                 });
             } else {
+                enableState();
                 return;
             }
 
