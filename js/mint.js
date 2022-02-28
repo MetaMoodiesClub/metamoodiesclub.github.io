@@ -1,5 +1,5 @@
-const contractAddress = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
-const networkId = 1337;
+const contractAddress = "0x15E94A0ad5F135fe08905D752f1D400E2F10eDBC";
+const networkId = 4; // Rinkeby testnet
 let mintCount = 1;
 let web3;
 let contract;
@@ -46,6 +46,7 @@ const updateMintCountText = async () => {
 }
 
 const setError = async (message) => {
+    $("#mint-success").hide();
     $("#mint-error").text(message).show();
 }
 
