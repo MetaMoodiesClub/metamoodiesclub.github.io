@@ -86,3 +86,11 @@ document.getElementById("video-meta-moodon").playbackRate = 2.0;
 document.getElementById("video-donation-card").playbackRate = 2.0;
 document.getElementById("video-merch").playbackRate = 2.0;
 document.getElementById("video-rocket").playbackRate = 1.2;
+
+// Listeners for each FAQ item
+const faqItems = document.getElementsByClassName("accordion-button");
+Array.from(faqItems).forEach((faqItem) => {
+    faqItem.addEventListener('click', () => {
+        gtag('event', 'FAQ Click', { 'question' : faqItem.getAttribute("data-bs-target") });
+    });
+});
