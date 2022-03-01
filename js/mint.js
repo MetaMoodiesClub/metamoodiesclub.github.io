@@ -11,17 +11,35 @@ let costPerNFT = 20000000000000000;
 let maxMintCount = 3;
 let remainingSupply = 1010;
 
+const sendEvent = (action) => {
+    gtag('event', action);
+}
+
+const sendEventValue = (action, value) => {
+    gtag('event', action, { 'eventValue' : value });
+}
+
+const sendException = (error) => {
+    sendEvent(error);
+    gtag('event', 'exception', {
+        'description': error,
+        'fatal': false
+    });
+}
+
 const getWeb3 = () => {
     return new Promise((resolve, reject) => {
         window.addEventListener("load", async () => {
             if (window.ethereum) {
                 web3 = new Web3(window.ethereum);
+                sendEvent("Web3 resolved");
                 try {
                     resolve(web3);
                 } catch (error) {
                     reject(error);
                 }
             } else {
+                sendException("Wallet not installed");
                 reject("Must install MetaMask");
             }
         });
@@ -37,8 +55,10 @@ const getContract = async () => {
                 data.abi,
                 contractAddress
             );
+            sendEvent("Contract resolved");
             resolve(contract);
         } catch (error) {
+            sendException("Contract not resolved");
             reject(error);
         }
     });
@@ -76,17 +96,20 @@ const addListeners = async () => {
     mintCount = 1;
     $("#connect-metamask-button").on("click", async (e) => {
         e.preventDefault();
+        sendEvent("Connect wallet");
         $("#connect-metamask-button").text("Connecting...");
         getAccounts().then(() => {
             $("#mint-counters").show();
             $("#mint-button").show();
             $("#connect-metamask-button").hide();
             $("#mint-error").hide();
+            sendEvent("Wallet connected");
         }).catch((error) => {
             $("#mint-counters").hide();
             $("#mint-button").hide();
             $("#connect-metamask-button").show();
             setError("Error connecting to Metamask. Please try again!");
+            sendException("Wallet not connected");
         }).finally(() => {
             $("#connect-metamask-button").text("Connect Wallet");
         });
@@ -94,15 +117,18 @@ const addListeners = async () => {
     $("#mint-count-minus").on("click", async (e) => {
         e.preventDefault();
         if (mintCount > 1) mintCount--;
+        sendEventValue("Mint count minus", mintCount);
         updateMintCountText();
     });
     $("#mint-count-plus").on("click", async (e) => {
         e.preventDefault();
         if (mintCount < maxMintCount) mintCount++;
+        sendEventValue("Mint count plus", mintCount);
         updateMintCountText();
     });
     $("#mint-button").on("click", async (e) => {
         e.preventDefault();
+        sendEventValue("Mint", mintCount);
         mintMoodies();
     });
 }
@@ -138,14 +164,17 @@ const mintMoodies = async () => {
                 if (whitelist[accounts[0]] === undefined) {
                     setError("This is a pre-sale! Looks like you are not on the whitelist. Please wait for the public sale!");
                     enableState();
+                    sendException("Not on whitelist");
                     return;
                 }
+                sendEvent("Pre sale mint");
                 mintStatus = contract.methods.mintPreSale(mintCount, whitelist[accounts[0]]).send({ 
                     from: accounts[0], 
                     gas: 200000,
                     value: totalCost
                 });
             } else if (publicSaleLive) {
+                sendEvent("Public sale mint");
                 mintStatus = contract.methods.mintPublicSale(mintCount).send({ 
                     from: accounts[0], 
                     gas: 200000,
@@ -159,15 +188,18 @@ const mintMoodies = async () => {
             await mintStatus.then((success) => {
                 $("#mint-error").hide();
                 $("#mint-success").show();
+                sendEvent("Mint success");
                 console.log(success);
             }).catch((error) => {
                 setError(`Mint failed! ${error.message} Please retry!`);
                 $("#mint-success").hide();
+                sendException("Mint failed");
             }).finally(() => {
                 enableState();
             }).then(() => fetchSaleDetails());
     }).catch(() => {
         setError("Please select the correct network in the Wallet!");
+        sendException("Incorrect network");
         enableState();
     });
 }

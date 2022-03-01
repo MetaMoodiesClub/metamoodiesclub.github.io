@@ -24,7 +24,7 @@ window.onscroll = function () {
     scrollFunction();
 };
 
-function sendScreenEvent(name) {
+function sendScreenView(name) {
     gtag('event', 'screen_view', {
         'app_name': 'Meta Moodies Club Webpage',
         'screen_name' : name
@@ -41,7 +41,7 @@ function sectionChangeTelemetry(detectedSection) {
     if (currentSection != detectedSection) {
         currentSection = detectedSection;
         console.log(`Section changed to: ${currentSection}`);
-        sendScreenEvent(currentSection);
+        sendScreenView(currentSection);
     }
 }
 
