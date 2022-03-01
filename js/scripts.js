@@ -13,7 +13,7 @@ const sections = [
     "faq"
 ];
 const screenPos = [];
-sections.forEach(() => screenPos.push(0) - 50);
+sections.forEach(() => screenPos.push(0));
 let currentSection = "";
 
 //Get the button
@@ -33,7 +33,7 @@ function sendScreenView(name) {
 
 function setSectionPositions() {
     sections.forEach((id, index) => {
-        screenPos[index] = $(`#${id}`).offset().top;
+        screenPos[index] = $(`#${id}`).offset().top - 50;
     });
 }
 
