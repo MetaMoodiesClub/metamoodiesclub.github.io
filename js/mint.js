@@ -1,6 +1,9 @@
 const contractAddress = "0x21381E9ef3024BA22E1CACe935a7662bC743af51";
 const networkId = 4; // Rinkeby testnet
+const networkName = "rinkeby";
 let mintCount = 1;
+let useTorus = true;
+let torus;
 let web3;
 let contract;
 let whitelist;
@@ -24,6 +27,31 @@ const sendException = (error) => {
     gtag('event', 'exception', {
         'description': error,
         'fatal': false
+    });
+}
+
+const initTorus = () => {
+    torus = new Torus();
+    return torus.init({
+        showTorusButton: false,
+        clientId: "BHRa4fTMnD-zuo91dEyYV_c1s_wOtEpGo7smos2LufU6Dl9rrGLqYRhcF2-3i-mnwVyG5nMBpyaqSRpjqISWl7Y",
+        whiteLabel: {
+            theme: {
+                isDark: false,
+                colors: {
+                torusBrand1: "#4597C0",
+                },
+            },
+            logoDark: "https://metamoodies.club/assets/favicon/android-chrome-512x512.png", // Dark logo for light background
+            logoLight: "https://metamoodies.club/assets/favicon/android-chrome-512x512.png", // Light logo for dark background
+            topupHide: true,
+            featuredBillboardHide: true,
+            disclaimerHide: true,
+            defaultLanguage: "en",
+        },
+        network: {
+            host: networkName
+        }
     });
 }
 
@@ -104,6 +132,7 @@ const addListeners = async () => {
             $("#connect-metamask-button").hide();
             $("#mint-error").hide();
             sendEvent("Wallet connected");
+            useTorus = false;
         }).catch((error) => {
             $("#mint-counters").hide();
             $("#mint-button").hide();
