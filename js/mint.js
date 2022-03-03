@@ -47,6 +47,8 @@ const initTorus = () => {
             topupHide: true,
             featuredBillboardHide: true,
             disclaimerHide: true,
+            tncLink: [],
+            privacyPolicy:[],
             defaultLanguage: "en",
         },
         network: {
@@ -57,20 +59,22 @@ const initTorus = () => {
 
 const getWeb3 = () => {
     return new Promise((resolve, reject) => {
-        window.addEventListener("load", async () => {
+        if (useTorus) {
+            web3 = new Web3(torus.provider);
+        } else {
             if (window.ethereum) {
                 web3 = new Web3(window.ethereum);
-                sendEvent("Web3 resolved");
-                try {
-                    resolve(web3);
-                } catch (error) {
-                    reject(error);
-                }
             } else {
                 sendException("Wallet not installed");
                 reject("Must install MetaMask");
             }
-        });
+        }
+        sendEvent("Web3 resolved");
+        try {
+            resolve(web3);
+        } catch (error) {
+            reject(error);
+        }
     });
 };
 
@@ -84,8 +88,10 @@ const getContract = async () => {
                 contractAddress
             );
             sendEvent("Contract resolved");
+            console.log("Contract resolved");
             resolve(contract);
         } catch (error) {
+            console.log(`Contract not resolved: ${error}`);
             sendException("Contract not resolved");
             reject(error);
         }
@@ -93,7 +99,20 @@ const getContract = async () => {
 };
 
 const getAccounts = async () => {
-    return window.ethereum.request({ method: "eth_requestAccounts" });
+    if (useTorus) {
+        return web3.eth.getAccounts();
+    } else {
+        return window.ethereum.request({ method: "eth_requestAccounts" });
+    }
+}
+
+const checkBalance = async () => {
+    const balance = await web3.eth.getBalance((await getAccounts())[0]);
+    console.log(`Balance is: ${balance}`);
+    if (balance < mintCount * costPerNFT * 1.2) {
+        setError(`Looks like your balance (${ (balance / 1000000000000000000).toPrecision(2) } ETH) is low! You should Topup before mint!`);
+        $("#topup-wallet").show();
+    }
 }
 
 const updateMintCountText = async () => {
@@ -124,23 +143,59 @@ const addListeners = async () => {
     mintCount = 1;
     $("#connect-metamask-button").on("click", async (e) => {
         e.preventDefault();
-        sendEvent("Connect wallet");
+        sendEvent("Connect wallet metamask");
         $("#connect-metamask-button").text("Connecting...");
-        getAccounts().then(() => {
+        useTorus = false;
+        getWeb3()
+        .then(() => getAccounts())
+        .then(() => getContract())
+        .then(() => {
             $("#mint-counters").show();
             $("#mint-button").show();
-            $("#connect-metamask-button").hide();
+            $("#connect-wallet-buttons").hide();
             $("#mint-error").hide();
             sendEvent("Wallet connected");
-            useTorus = false;
         }).catch((error) => {
             $("#mint-counters").hide();
             $("#mint-button").hide();
-            $("#connect-metamask-button").show();
+            $("#connect-wallet-buttons").show();
             setError("Error connecting to Metamask. Please try again!");
-            sendException("Wallet not connected");
-        }).finally(() => {
-            $("#connect-metamask-button").text("Connect Wallet");
+            sendException("Metamask connection failed");
+        }).finally(async () => {
+            $("#connect-metamask-button").text("Connect with Metamask");
+        })
+        .then(() => checkBalance());
+    });
+    $("#connect-torus-button").on("click", async (e) => {
+        e.preventDefault();
+        sendEvent("Connect wallet torus");
+        $("#connect-torus-button").text("Connecting...");
+        useTorus = true;
+        getWeb3()
+        .then(() => torus.login())
+        .then(() => getContract())
+        .then(() => {
+            $("#mint-counters").show();
+            $("#mint-button").show();
+            $("#connect-wallet-buttons").hide();
+            $("#mint-error").hide();
+            sendEvent("Wallet connected");
+        }).catch(() => {
+            $("#mint-counters").hide();
+            $("#mint-button").hide();
+            $("#connect-wallet-buttons").show();
+            setError("Error connecting to Torus. Please try again!");
+            sendException("Torus connection failed");
+        }).finally(async () => {
+            $("#connect-torus-button").text("Connect with Email");
+        })
+        .then(() => checkBalance());
+    });
+    $("#topup-wallet").on("click", async (e) => {
+        return torus.initiateTopup("wyre", {
+            fiatValue: mintCount * 100,
+            selectedCryptoCurrency: "ETH",
+            selectedAddress: (await getAccounts())[0],
         });
     });
     $("#mint-count-minus").on("click", async (e) => {
@@ -182,7 +237,7 @@ const fetchSaleDetails = async () => {
 
 const mintMoodies = async () => {
     disableState();
-    await getContract()
+    await checkBalance() 
         .then(() => fetchSaleDetails())
         .then(() => getAccounts())
         .then(async (accounts) => {
@@ -226,7 +281,8 @@ const mintMoodies = async () => {
             }).finally(() => {
                 enableState();
             }).then(() => fetchSaleDetails());
-    }).catch(() => {
+    }).catch((error) => {
+        console.log(error);
         setError("Please select the correct network in the Wallet!");
         sendException("Incorrect network");
         enableState();
@@ -235,6 +291,7 @@ const mintMoodies = async () => {
 
 async function moodiesMinter() {
     await addListeners()
+        .then(() => initTorus())
         .then(() => getWeb3())
         .then(() => getContract())
         .then(() => fetchSaleDetails())

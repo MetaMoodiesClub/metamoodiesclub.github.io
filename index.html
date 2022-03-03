@@ -132,8 +132,12 @@
                                 <span id="mint-count" class="mx-3">1</span>
                                 <button type="button" class="btn btn-secondary mint-count-button" id="mint-count-plus">+</button>
                             </div>
-                            <button type="button" class="btn btn-secondary btn-lg rounded-pill" id="mint-button" style="display: none;">Mint Moodies</button>
-                            <button type="button" class="btn btn-primary btn-lg rounded-pill" id="connect-metamask-button">Connect Wallet</button>
+                            <button type="button" class="wallet-button btn btn-secondary btn-md rounded-pill" id="mint-button" style="display: none;">Mint Moodies</button><br/>
+                            <button type="button" class="wallet-button btn btn-primary btn-md rounded-pill mt-4 mb-2" id="topup-wallet" style="display: none;">Topup wallet</button>
+                            <span id="connect-wallet-buttons">
+                                <button type="button" class="wallet-button btn btn-primary btn-md rounded-pill" id="connect-metamask-button">Connect with Metamask</button><br/><br/>
+                                <button type="button" class="wallet-button btn btn-secondary btn-md rounded-pill" id="connect-torus-button">Connect with Email</button>
+                            </span>
                             <p id="mint-error" class="mt-4 mx-5 mx-sm-0" style="display: none;">Connect to Metamask</p>
                             <div id="mint-success" class="mt-5 mx-5 mx-sm-0" style="display: none;">
                                 <p>Mint successful!</p>

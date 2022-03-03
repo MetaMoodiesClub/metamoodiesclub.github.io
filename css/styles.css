@@ -116,6 +116,9 @@
   line-height: 2rem;
   color: #C258E7;
 }
+.wallet-button {
+  width: 15em;
+}
 .curved-bg-title {
   margin-top: calc(1.475rem + 2.7vw) !important;
 }
