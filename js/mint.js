@@ -1,5 +1,9 @@
 const contractAddress = "0x21381E9ef3024BA22E1CACe935a7662bC743af51";
-const networkId = 4; // Rinkeby testnet
+const ethChain = "rinkeby"; //mainnet
+const web3authSdk = window.Web3auth;
+
+let torus;
+let web3AuthInstance = null;
 let mintCount = 1;
 let web3;
 let contract;
@@ -30,18 +34,40 @@ const sendException = (error) => {
 const getWeb3 = () => {
     return new Promise((resolve, reject) => {
         window.addEventListener("load", async () => {
-            if (window.ethereum) {
-                web3 = new Web3(window.ethereum);
-                sendEvent("Web3 resolved");
-                try {
+            torus = new Torus();
+            return torus.init({
+                    showTorusButton: false,
+                    clientId: "BHRa4fTMnD-zuo91dEyYV_c1s_wOtEpGo7smos2LufU6Dl9rrGLqYRhcF2-3i-mnwVyG5nMBpyaqSRpjqISWl7Y",
+                    whiteLabel: {
+                        theme: {
+                          isDark: false,
+                          colors: {
+                            torusBrand1: "#4597C0",
+                          },
+                        },
+                        logoDark: "https://metamoodies.club/assets/favicon/android-chrome-512x512.png", // Dark logo for light background
+                        logoLight: "https://metamoodies.club/assets/favicon/android-chrome-512x512.png", // Light logo for dark background
+                        topupHide: true,
+                        featuredBillboardHide: true,
+                        disclaimerHide: true,
+                        defaultLanguage: "en",
+                    },
+                    network: {
+                        host: ethChain
+                    }
+                })
+                .then(async () => {
+                    try {
+                        await torus.logout();
+                    } catch (error) {
+                        // nothing
+                    }
+                    web3 = new Web3(torus.provider);
+                    sendEvent("Web3 resolved");
                     resolve(web3);
-                } catch (error) {
+                }).catch(error => {
                     reject(error);
-                }
-            } else {
-                sendException("Wallet not installed");
-                reject("Must install MetaMask");
-            }
+                });
         });
     });
 };
@@ -65,7 +91,8 @@ const getContract = async () => {
 };
 
 const getAccounts = async () => {
-    return window.ethereum.request({ method: "eth_requestAccounts" });
+    return torus.login()
+        .then(() => web3.eth.getAccounts());
 }
 
 const updateMintCountText = async () => {
@@ -98,13 +125,15 @@ const addListeners = async () => {
         e.preventDefault();
         sendEvent("Connect wallet");
         $("#connect-metamask-button").text("Connecting...");
-        getAccounts().then(() => {
+        getAccounts().then((accounts) => {
+            console.log(accounts);
             $("#mint-counters").show();
             $("#mint-button").show();
             $("#connect-metamask-button").hide();
             $("#mint-error").hide();
             sendEvent("Wallet connected");
         }).catch((error) => {
+            console.log(error);
             $("#mint-counters").hide();
             $("#mint-button").hide();
             $("#connect-metamask-button").show();
