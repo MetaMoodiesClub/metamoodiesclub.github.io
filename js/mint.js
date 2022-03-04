@@ -1,4 +1,4 @@
-const contractAddress = "0x21381E9ef3024BA22E1CACe935a7662bC743af51";
+const contractAddress = "0x3B9c0540235Ca2018AB8012EE2be6E4B57198f2c";
 const networkId = 4; // Rinkeby testnet
 const networkName = "rinkeby";
 let mintCount = 1;
